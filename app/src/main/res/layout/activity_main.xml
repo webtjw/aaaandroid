@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/match_parent" android:background="#151922">
+
+    <LinearLayout android:id="@+id/bottomLink" style="@style/bottom_box">
+
+        <TextView android:text="@string/bottom_contact" style="@style/bottom_text" />
+        <TextView android:text="@string/language_separator" style="@style/bottom_separator" />
+        <TextView android:text="@string/bottom_right" style="@style/bottom_text" />
+        <TextView android:text="@string/language_separator" style="@style/bottom_separator" />
+        <TextView android:text="@string/bottom_other" style="@style/bottom_text" />
+
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+
+        <LinearLayout style="@style/top_bar">
+
+            <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingTop="45dp" android:paddingBottom="10dp">
+
+                <LinearLayout style="@style/wrap_content" android:orientation="horizontal" android:layout_gravity="start|center_vertical" android:gravity="center_vertical">
+
+                    <ImageView style="@style/company_logo" android:src="@mipmap/tokheim_hengshan" android:contentDescription="@string/dover" />
+
+                </LinearLayout>
+
+                <LinearLayout style="@style/language_box">
+
+                    <TextView style="@style/language_item" android:text="@string/language1" />
+                    <TextView style="@style/language_item" android:text="@string/language_separator" android:layout_marginStart="10dp" android:layout_marginEnd="10dp" />
+                    <TextView style="@style/language_item" android:text="@string/language2" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                <ImageView style="@style/wrap_content" android:src="@drawable/notice_top_angle" android:contentDescription="@string/notice_welcome" android:layout_marginStart="80dp" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/notice_box">
+
+                <ImageView style="@style/notice_icon" android:contentDescription="@string/notice" />
+
+                <TextView style="@style/notice_text" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout android:id="@+id/mVideoViewBox" style="@style/video_box">
+
+            <VideoView android:id="@+id/mVideoView" style="@style/video_fit" />
+
+            <LinearLayout android:id="@+id/mVideoIndexBox" style="@style/video_index_box" />
+
+        </RelativeLayout>
+
+        <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="50dp" android:layout_marginBottom="20dp" android:paddingLeft="60dp" android:paddingRight="60dp">
+
+            <ImageView android:id="@+id/imgLeft" android:src="@mipmap/left" style="@style/image_small_item" android:layout_alignParentEnd="true" android:contentDescription="@string/notice_welcome" />
+            <ImageView android:id="@+id/imgMiddle" android:src="@mipmap/middle" style="@style/image_small_item" android:layout_centerInParent="true" android:contentDescription="@string/notice_welcome" />
+            <ImageView android:id="@+id/imgRight" android:src="@mipmap/right" style="@style/image_small_item" android:layout_alignParentStart="true" android:contentDescription="@string/notice_welcome" />
+
+        </RelativeLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:orientation="vertical">
+
+            <ImageView android:layout_width="960dp" android:layout_height="400dp" android:scaleType="fitXY" android:src="@mipmap/dover_people" android:contentDescription="@string/notice_welcome" />
+
+            <LinearLayout style="@style/more_box">
+
+                <TextView style="@style/wrap_content" android:text="@string/more" android:textSize="18sp" android:textColor="#eb2129" />
+
+                <ImageView android:layout_width="30dp" android:layout_height="30dp" android:scaleType="fitXY" android:src="@mipmap/right_angle" android:contentDescription="@string/notice_welcome" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>
