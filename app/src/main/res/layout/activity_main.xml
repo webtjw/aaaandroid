@@ -72,7 +72,7 @@
 
             <LinearLayout style="@style/more_box">
 
-                <TextView style="@style/wrap_content" android:text="@string/more" android:textSize="18sp" android:textColor="#eb2129" />
+                <TextView android:id="@+id/moreButton" style="@style/wrap_content" android:text="@string/more" android:textSize="18sp" android:textColor="#eb2129" />
 
                 <ImageView android:layout_width="30dp" android:layout_height="30dp" android:scaleType="fitXY" android:src="@mipmap/right_angle" android:contentDescription="@string/notice_welcome" />
 
@@ -82,6 +82,22 @@
 
     </LinearLayout>
 
-    <SurfaceView android:id="@+id/cameraView" android:layout_width="600dp" android:layout_height="600dp" android:layout_gravity="bottom|center_horizontal" android:layout_marginBottom="200dp" />
+    <RelativeLayout android:id="@+id/cameraViewBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="bottom" android:layout_marginBottom="100dp" android:visibility="gone">
+
+        <SurfaceView android:id="@+id/cameraView" android:layout_width="700dp" android:layout_height="700dp" android:layout_centerInParent="true" />
+
+        <LinearLayout style="@style/wrap_content" android:orientation="vertical" android:layout_toEndOf="@id/cameraView" android:layout_marginStart="20dp">
+
+            <LinearLayout style="@style/camera_side_item" android:id="@+id/takePictureTrigger">
+                <ImageView style="@style/camera_side_icon" android:src="@mipmap/take_a_picture" android:contentDescription="@string/take_a_picture" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/camera_side_item" android:id="@+id/closeCameraTrigger">
+                <ImageView style="@style/camera_side_icon" android:src="@mipmap/close" android:contentDescription="@string/close" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </FrameLayout>

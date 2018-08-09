@@ -7,12 +7,13 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.DisplayMetrics
 import android.view.SurfaceHolder
+import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import com.dover.www.intelligentfuel.common.VideoPlayer
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
+class MainActivity : AppCompatActivity(), View.OnClickListener, SurfaceHolder.Callback {
 
     companion object {
         const val TAG = "MainActivity"
@@ -26,26 +27,12 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        surfaceHolder = cameraView.holder
-        surfaceHolder?.addCallback(this@MainActivity)
+        bindClickEvent()
     }
 
     override fun onPause() {
         super.onPause()
         clearCameraData()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (camera == null) {
-            camera = getCamera()
-            try {
-                camera?.setPreviewDisplay(surfaceHolder)
-                camera?.startPreview()
-            } catch (e: Exception) {
-                RobinApplication.log(TAG + "onResume", e.message.toString())
-            }
-        }
     }
 
     override fun onStart() {
@@ -79,6 +66,14 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
         clearCameraData()
     }
 
+    override fun onClick(view: View?) {
+        when (view?.id) {
+            R.id.moreButton -> playCamera()
+            R.id.closeCameraTrigger -> clearCameraData()
+            R.id.takePictureTrigger -> RobinApplication.toast(this@MainActivity, "尚未开放")
+        }
+    }
+
     private fun playVideos() {
         // video display should obey percentage 16:9
         val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -104,11 +99,36 @@ class MainActivity : AppCompatActivity(), SurfaceHolder.Callback {
         return mCamera
     }
 
+    private fun playCamera() {
+        cameraViewBox.visibility = View.VISIBLE
+
+        if (surfaceHolder == null) {
+            surfaceHolder = cameraView.holder
+            surfaceHolder?.addCallback(this@MainActivity)
+        }
+
+        if (camera == null) {
+            camera = getCamera()
+            try {
+                camera?.setPreviewDisplay(surfaceHolder)
+                camera?.startPreview()
+            } catch (e: Exception) {
+                RobinApplication.log(TAG + "playCamera", e.message.toString())
+            }
+        }
+    }
+
     private fun clearCameraData() {
+        cameraViewBox.visibility = View.GONE
         camera?.setPreviewCallback(null)
         camera?.stopPreview()
         camera?.release()
-        RobinApplication.log(TAG, "clearCameraData")
         camera = null
+    }
+
+    private fun bindClickEvent() {
+        moreButton.setOnClickListener(this@MainActivity)
+        closeCameraTrigger.setOnClickListener(this@MainActivity)
+        takePictureTrigger.setOnClickListener(this@MainActivity)
     }
 }
