@@ -9,10 +9,10 @@ import com.dover.www.intelligentfuel.RobinApplication
 import java.io.File
 
 class VideoPlayer constructor(ctx: Context, mVideoView: VideoView, videoFolder: String, mVideoIndexBox: LinearLayout) {
-    val context = ctx;
-    val videoView = mVideoView;
-    val folder = File(videoFolder);
-    val videoIndexBox = mVideoIndexBox;
+    private val context = ctx
+    private val videoView = mVideoView
+    private val folder = File(videoFolder)
+    private val videoIndexBox = mVideoIndexBox
 
     val videoList = ArrayList<String>()
     var playIndex = 0
@@ -47,7 +47,7 @@ class VideoPlayer constructor(ctx: Context, mVideoView: VideoView, videoFolder: 
         }
     }
 
-    fun makeIndexIndicator() {
+    private fun makeIndexIndicator() {
         videoIndexBox.removeAllViews()
         var forIndex = 0
         for (videoItem in videoList) {
