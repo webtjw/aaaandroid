@@ -1,7 +1,11 @@
 package com.dover.www.intelligentfuel
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.hardware.Camera
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
@@ -19,7 +23,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SurfaceHolder.Ca
         const val TAG = "MainActivity"
     }
 
-    private var videoPlayer: VideoPlayer? = null
+    // private var videoPlayer: VideoPlayer? = null
     private var camera: Camera? = null
     private var surfaceHolder: SurfaceHolder? = null
 
@@ -37,6 +41,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SurfaceHolder.Ca
 
     override fun onStart() {
         super.onStart()
+        playVideos()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
         playVideos()
     }
 
@@ -70,7 +79,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SurfaceHolder.Ca
         when (view?.id) {
             R.id.moreButton -> playCamera()
             R.id.closeCameraTrigger -> clearCameraData()
-            R.id.takePictureTrigger -> RobinApplication.toast(this@MainActivity, "尚未开放")
+            R.id.takePictureTrigger -> {
+                val bitmap = Bitmap.createBitmap(700, 700, Bitmap.Config.ARGB_8888)
+                val canvas = Canvas(bitmap)
+                surfaceHolder?.lockCanvas(canvas)
+                cameraView.draw(canvas)
+                RobinApplication.toast(this@MainActivity, "尚未开放")
+            }
         }
     }
 
@@ -82,10 +97,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SurfaceHolder.Ca
         val screenWidth = dm.widthPixels
         val videoViewBoxHeight = screenWidth / 16 * 9 + 140 // 上下增加 70dp 的黑边
         mVideoViewBox.layoutParams = LinearLayout.LayoutParams(screenWidth, videoViewBoxHeight)
+        // prepare the widget
+        mVideoView.setOnPreparedListener { mVideoView.start() }
+        mVideoView.setOnCompletionListener { mVideoView.start() }
+        mVideoView.setOnErrorListener { mediaPlayer, what, extra ->
+            RobinApplication.log(TAG, "video error: ${what} / ${extra}")
+            val restartIntent = Intent(this@MainActivity, MainActivity::class.java)
+            restartIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this@MainActivity.startActivity(restartIntent)
+            true
+        }
+        mVideoView.setVideoURI(Uri.parse("android.resource://" + packageName + "/" + R.raw.yijiezhuomaquan))
         // get all video files
-        videoPlayer = VideoPlayer(this@MainActivity, mVideoView, Environment.getExternalStorageDirectory().absolutePath + "/Tokheim/AdVideo", mVideoIndexBox)
-        videoPlayer?.prepare()
-        videoPlayer?.start()
+        // videoPlayer = VideoPlayer(this@MainActivity, mVideoView, Environment.getExternalStorageDirectory().absolutePath + "/Tokheim/AdVideo", mVideoIndexBox)
+        // videoPlayer?.prepare()
+        // videoPlayer?.start()
     }
 
     private fun getCamera(): Camera? {

@@ -16,11 +16,11 @@
 
         <LinearLayout style="@style/top_bar">
 
-            <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingTop="45dp" android:paddingBottom="10dp">
+            <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingTop="20dp">
 
                 <LinearLayout style="@style/wrap_content" android:orientation="horizontal" android:layout_gravity="start|center_vertical" android:gravity="center_vertical">
 
-                    <ImageView style="@style/company_logo" android:src="@mipmap/tokheim_hengshan" android:contentDescription="@string/dover" />
+                    <ImageView style="@style/company_logo" android:src="@mipmap/sinopec" android:contentDescription="@string/dover" />
 
                 </LinearLayout>
 
@@ -36,7 +36,7 @@
 
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
 
-                <ImageView style="@style/wrap_content" android:src="@drawable/notice_top_angle" android:contentDescription="@string/notice_welcome" android:layout_marginStart="80dp" />
+                <ImageView style="@style/wrap_content" android:src="@drawable/notice_top_angle" android:contentDescription="@string/notice_welcome" android:layout_marginStart="100dp" />
 
             </LinearLayout>
 
@@ -58,7 +58,7 @@
 
         </RelativeLayout>
 
-        <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="50dp" android:layout_marginBottom="20dp" android:paddingLeft="60dp" android:paddingRight="60dp">
+        <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="30dp" android:layout_marginBottom="20dp" android:paddingLeft="60dp" android:paddingRight="60dp">
 
             <ImageView android:id="@+id/imgLeft" android:src="@mipmap/left" style="@style/image_small_item" android:layout_alignParentEnd="true" android:contentDescription="@string/notice_welcome" />
             <ImageView android:id="@+id/imgMiddle" android:src="@mipmap/middle" style="@style/image_small_item" android:layout_centerInParent="true" android:contentDescription="@string/notice_welcome" />
@@ -66,17 +66,107 @@
 
         </RelativeLayout>
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:orientation="vertical">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:orientation="horizontal">
 
-            <ImageView android:layout_width="960dp" android:layout_height="400dp" android:scaleType="fitXY" android:src="@mipmap/dover_people" android:contentDescription="@string/notice_welcome" />
+            <RelativeLayout style="@style/gun_display_item">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="250dp" android:background="@mipmap/gun_item_bg" android:gravity="center">
+                        <LinearLayout android:layout_width="156dp" android:layout_height="200dp" android:background="@drawable/gun_item_radius" android:gravity="center">
+                            <ImageView android:layout_width="120dp" android:layout_height="wrap_content" android:scaleType="fitCenter" android:src="@mipmap/gun" android:contentDescription="@string/notice_welcome" />
+                        </LinearLayout>
+                    </LinearLayout>
 
-            <LinearLayout style="@style/more_box">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="200dp" android:orientation="horizontal">
+                        <LinearLayout android:layout_width="117dp" android:layout_height="match_parent" android:gravity="center" android:background="#F03840">
+                            <ImageView style="@style/pay_icon" android:src="@mipmap/pay_1" android:contentDescription="@string/pay_in_cash" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="117dp" android:layout_height="match_parent" android:gravity="center" android:background="#ed212a">
+                            <ImageView style="@style/pay_icon" android:src="@mipmap/pay_2" android:contentDescription="@string/pay_by_mobile" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
 
-                <TextView android:id="@+id/moreButton" style="@style/wrap_content" android:text="@string/more" android:textSize="18sp" android:textColor="#eb2129" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="100dp" android:layout_centerInParent="true" android:gravity="center">
+                    <TextView style="@style/gun_oil_type_text" android:text="@string/oil_98" />
+                </LinearLayout>
+            </RelativeLayout>
 
-                <ImageView android:layout_width="30dp" android:layout_height="30dp" android:scaleType="fitXY" android:src="@mipmap/right_angle" android:contentDescription="@string/notice_welcome" />
+            <RelativeLayout style="@style/gun_display_item">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="250dp" android:background="@mipmap/gun_item_bg" android:gravity="center">
+                        <LinearLayout android:layout_width="156dp" android:layout_height="200dp" android:background="@drawable/gun_item_radius" android:gravity="center">
+                            <ImageView android:layout_width="120dp" android:layout_height="wrap_content" android:scaleType="fitCenter" android:src="@mipmap/gun" android:contentDescription="@string/notice_welcome" />
+                        </LinearLayout>
+                    </LinearLayout>
 
-            </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="200dp" android:orientation="horizontal">
+                        <LinearLayout android:layout_width="117dp" android:layout_height="match_parent" android:gravity="center" android:background="#F03840">
+                            <ImageView style="@style/pay_icon" android:src="@mipmap/pay_1" android:contentDescription="@string/pay_in_cash" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="117dp" android:layout_height="match_parent" android:gravity="center" android:background="#ed212a">
+                            <ImageView style="@style/pay_icon" android:src="@mipmap/pay_2" android:contentDescription="@string/pay_by_mobile" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="100dp" android:layout_centerInParent="true" android:gravity="center">
+                    <TextView style="@style/gun_oil_type_text" android:text="@string/oil_95" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout style="@style/gun_display_item">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="250dp" android:background="@mipmap/gun_item_bg" android:gravity="center">
+                        <LinearLayout android:layout_width="156dp" android:layout_height="200dp" android:background="@drawable/gun_item_radius" android:gravity="center">
+                            <ImageView android:layout_width="120dp" android:layout_height="wrap_content" android:scaleType="fitCenter" android:src="@mipmap/gun" android:contentDescription="@string/notice_welcome" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="200dp" android:orientation="horizontal">
+                        <LinearLayout android:layout_width="117dp" android:layout_height="match_parent" android:gravity="center" android:background="#F03840">
+                            <ImageView style="@style/pay_icon" android:src="@mipmap/pay_1" android:contentDescription="@string/pay_in_cash" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="117dp" android:layout_height="match_parent" android:gravity="center" android:background="#ed212a">
+                            <ImageView style="@style/pay_icon" android:src="@mipmap/pay_2" android:contentDescription="@string/pay_by_mobile" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="100dp" android:layout_centerInParent="true" android:gravity="center">
+                    <TextView style="@style/gun_oil_type_text" android:text="@string/oil_92" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout style="@style/gun_display_item">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="250dp" android:background="@mipmap/gun_item_bg" android:gravity="center">
+                        <LinearLayout android:layout_width="156dp" android:layout_height="200dp" android:background="@drawable/gun_item_radius" android:gravity="center">
+                            <ImageView android:layout_width="120dp" android:layout_height="wrap_content" android:scaleType="fitCenter" android:src="@mipmap/gun" android:contentDescription="@string/notice_welcome" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="200dp" android:orientation="horizontal">
+                        <LinearLayout android:layout_width="117dp" android:layout_height="match_parent" android:gravity="center" android:background="#F03840">
+                            <ImageView style="@style/pay_icon" android:src="@mipmap/pay_1" android:contentDescription="@string/pay_in_cash" />
+                        </LinearLayout>
+                        <LinearLayout android:layout_width="117dp" android:layout_height="match_parent" android:gravity="center" android:background="#ed212a">
+                            <ImageView style="@style/pay_icon" android:src="@mipmap/pay_2" android:contentDescription="@string/pay_by_mobile" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="100dp" android:layout_centerInParent="true" android:gravity="center">
+                    <TextView style="@style/gun_oil_type_text" android:text="@string/oil_0" />
+                </LinearLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout style="@style/more_box">
+
+            <TextView android:id="@+id/moreButton" style="@style/wrap_content" android:text="@string/more" android:textSize="18sp" android:textColor="#eb2129" />
+
+            <ImageView android:layout_width="30dp" android:layout_height="30dp" android:scaleType="fitXY" android:src="@mipmap/right_angle" android:contentDescription="@string/notice_welcome" />
 
         </LinearLayout>
 

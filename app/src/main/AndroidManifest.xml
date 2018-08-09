@@ -11,12 +11,12 @@
     <application
         android:name=".RobinApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/logo"
+        android:icon="@mipmap/smart_fueling_system"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:screenOrientation="reversePortrait" android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

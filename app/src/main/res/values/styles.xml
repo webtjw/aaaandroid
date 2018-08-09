@@ -23,13 +23,13 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingLeft">60dp</item>
         <item name="android:paddingRight">60dp</item>
-        <item name="android:paddingBottom">60dp</item>
+        <item name="android:paddingBottom">30dp</item>
         <item name="android:orientation">vertical</item>
     </style>
 
     <style name="company_logo">
-        <item name="android:maxHeight">70dp</item>
-        <item name="android:maxWidth">300dp</item>
+        <item name="android:maxHeight">100dp</item>
+        <item name="android:maxWidth">400dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:adjustViewBounds">true</item>
@@ -58,8 +58,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:paddingTop">20dp</item>
-        <item name="android:paddingBottom">20dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
         <item name="android:background">#2d3238</item>
         <item name="android:gravity">center_vertical</item>
     </style>
@@ -151,6 +151,28 @@
 
     <style name="camera_side_icon">
         <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
+    <style name="gun_display_item">
+        <item name="android:layout_width">234dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+    </style>
+
+    <style name="gun_oil_type_text" parent="wrap_content">
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:background">@drawable/gun_item_radius</item>
+        <item name="android:layout_marginBottom">-25dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="pay_icon">
+        <item name="android:layout_width">70dp</item>
         <item name="android:layout_height">80dp</item>
         <item name="android:scaleType">fitXY</item>
     </style>
