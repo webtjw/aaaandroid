@@ -1,16 +1,17 @@
 package com.dover.www.intelligentfuel
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
+import android.os.*
 import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
-import android.os.Message
 import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
@@ -88,17 +89,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.openCamera -> openCamera()
+            R.id.language_box -> openCamera()
             R.id.closeCameraView -> closeCamera()
             R.id.takePicture -> {
-                loading = ZLoadingDialog(this@MainActivity)
-                loading!!.setLoadingBuilder(Z_TYPE.CIRCLE)
-                        .setLoadingColor(Color.parseColor("#ED1f29"))
-                        .setHintText("照片处理中...")
-                        .setHintTextSize(22f)
-                        .show()
-                cameraView.captureImage(this)
+                if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+                } else {
+                    takePicture()
+                }
             }
             R.id.openAlbum -> this@MainActivity.startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), 1)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1 -> {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) takePicture()
+                else RobinApplication.toast(this@MainActivity, "未获取到存储权限，无法拍照")
+            }
         }
     }
 
@@ -139,6 +149,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
         }.start()
     }
 
+    private fun takePicture() {
+        loading = ZLoadingDialog(this@MainActivity)
+        loading!!.setLoadingBuilder(Z_TYPE.CIRCLE)
+                .setLoadingColor(Color.parseColor("#ED1f29"))
+                .setHintText("照片处理中...")
+                .setHintTextSize(22f)
+                .show()
+        cameraView.captureImage(this)
+    }
+
     private fun playVideos() {
         // video display should obey percentage 16:9
         val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -171,6 +191,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
         openAlbum.setOnClickListener(this@MainActivity)
         closeCameraView.setOnClickListener(this@MainActivity)
         takePicture.setOnClickListener(this@MainActivity)
+        language_box.setOnClickListener(this@MainActivity)
     }
 
     private fun setLoopImageInMiddle() {
