@@ -1,40 +1,41 @@
 package com.dover.www.intelligentfuel
 
-import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.hardware.Camera
-import android.media.Image
+import android.graphics.Color
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.os.Message
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
+import android.provider.MediaStore
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.*
+import com.wonderkiln.camerakit.CameraKitEventCallback
+import com.wonderkiln.camerakit.CameraKitImage
+import com.zyao89.view.zloading.ZLoadingDialog
+import com.zyao89.view.zloading.Z_TYPE
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
+import java.io.IOException
 import java.lang.ref.WeakReference
+import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, SurfaceHolder.Callback {
+class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCallback<CameraKitImage> {
 
     companion object {
         const val TAG = "MainActivity"
 
-        private class mHandler constructor(activity: MainActivity) : Handler() {
+        private class MainHandler constructor(activity: MainActivity) : Handler() {
 
             val mActivity = WeakReference<MainActivity>(activity)
 
@@ -53,28 +54,30 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SurfaceHolder.Ca
         }
     }
 
-    // private var videoPlayer: VideoPlayer? = null
-    private var camera: Camera? = null
-    private var surfaceHolder: SurfaceHolder? = null
-    private val mainHandler = mHandler(this@MainActivity)
+    private val mHandler = MainHandler(this@MainActivity)
+    private var loading: ZLoadingDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         bindClickEvent()
+        setLoopImageInMiddle()
     }
 
     override fun onPause() {
         super.onPause()
-        clearCameraData()
+        if (cameraView.isStarted) cameraView.stop()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (cameraViewBox.visibility == View.VISIBLE && !cameraView.isStarted) cameraView.start()
     }
 
     override fun onStart() {
         super.onStart()
         playVideos()
-
-        setLoopImageInMiddle()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -82,48 +85,58 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SurfaceHolder.Ca
         playVideos()
     }
 
-    override fun surfaceCreated(p0: SurfaceHolder?) {
-        camera = getCamera()
-        try {
-            camera?.setPreviewDisplay(surfaceHolder)
-            camera?.startPreview()
-        } catch (e: Exception) {
-            RobinApplication.log(TAG + "surfaceCreated", e.message.toString())
-        }
-    }
-
-    override fun surfaceChanged(p0: SurfaceHolder?, p1: Int, p2: Int, p3: Int) {
-        if (surfaceHolder?.surface == null) return
-        try {
-            camera?.stopPreview()
-            camera?.setPreviewDisplay(surfaceHolder)
-            camera?.startPreview()
-        } catch (e: Exception) {
-            RobinApplication.log(TAG + "surfaceChanged", e.message.toString())
-        }
-    }
-
-    override fun surfaceDestroyed(p0: SurfaceHolder?) {
-        surfaceHolder?.removeCallback(this@MainActivity)
-        clearCameraData()
-    }
-
     override fun onClick(view: View?) {
         when (view?.id) {
-            R.id.moreButton -> playCamera()
-            R.id.closeCameraTrigger -> clearCameraData()
-            R.id.takePictureTrigger -> {
-                val bitmap = Bitmap.createBitmap(700, 700, Bitmap.Config.ARGB_8888)
-                val canvas = Canvas(bitmap)
-                cameraView.draw(canvas)
-                canvas.save()
-                val outputImage = File(Environment.getExternalStorageDirectory().absolutePath + "/Tokheim/" + System.currentTimeMillis() + ".jpg")
-                val outputImageStream = FileOutputStream(outputImage)
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputImageStream)
-                outputImageStream.close()
-                RobinApplication.toast(this@MainActivity, "功能维护中")
+            R.id.openCamera -> openCamera()
+            R.id.closeCameraView -> closeCamera()
+            R.id.takePicture -> {
+                loading = ZLoadingDialog(this@MainActivity)
+                loading!!.setLoadingBuilder(Z_TYPE.CIRCLE)
+                        .setLoadingColor(Color.parseColor("#ED1f29"))
+                        .setHintText("照片处理中...")
+                        .setHintTextSize(22f)
+                        .show()
+                cameraView.captureImage(this)
             }
+            R.id.openAlbum -> this@MainActivity.startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), 1)
         }
+    }
+
+    override fun callback(cameraKitImage: CameraKitImage?) {
+        Thread {
+            var saveFolder: String = this@MainActivity.filesDir.path + File.separator
+
+            if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageRemovable()) {
+                saveFolder = Environment.getExternalStorageDirectory().absolutePath + File.separator + Environment.DIRECTORY_DCIM + File.separator + "Camera" + File.separator
+            }
+
+            val fileFolder = File(saveFolder)
+            if (!fileFolder.exists()) fileFolder.mkdirs()
+
+            val fileName = Date().time.toString() + ".jpg"
+            val filePath: String = saveFolder + fileName
+
+            // save file
+            try {
+                val out = FileOutputStream(filePath)
+                if (cameraKitImage!!.bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)) {
+                    out.flush()
+                    out.close()
+                }
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            val imageFile = File(filePath)
+            MediaStore.Images.Media.insertImage(this@MainActivity.contentResolver, imageFile.absolutePath, fileName, null)
+            // 图片加入相册
+            val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+            val contentUri = Uri.fromFile(imageFile)
+            mediaScanIntent.data = contentUri
+            this@MainActivity.sendBroadcast(mediaScanIntent)
+            this@MainActivity.loading!!.dismiss()
+        }.start()
     }
 
     private fun playVideos() {
@@ -137,65 +150,27 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SurfaceHolder.Ca
         // prepare the widget
         mVideoView.setOnPreparedListener { mVideoView.start() }
         mVideoView.setOnCompletionListener { mVideoView.start() }
-        mVideoView.setOnErrorListener { mediaPlayer, what, extra ->
-            RobinApplication.log(TAG, "video error: ${what} / ${extra}")
+        mVideoView.setOnErrorListener { _, what, extra ->
+            RobinApplication.log(TAG, "video error: $what / $extra")
             val restartIntent = Intent(this@MainActivity, MainActivity::class.java)
             restartIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this@MainActivity.startActivity(restartIntent)
             true
         }
         mVideoView.setVideoURI(Uri.parse("android.resource://" + packageName + "/" + R.raw.yijiezhuomaquan))
-        // get all video files
-        // videoPlayer = VideoPlayer(this@MainActivity, mVideoView, Environment.getExternalStorageDirectory().absolutePath + "/Tokheim/AdVideo", mVideoIndexBox)
-        // videoPlayer?.prepare()
-        // videoPlayer?.start()
     }
 
-    private fun getCamera(): Camera? {
-        var mCamera: Camera? = null
-        try {
-            camera?.release()
-            if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.CAMERA), 1)
-            }
-            mCamera = android.hardware.Camera.open(0)
-        } catch (e: Exception) {
-            RobinApplication.log(TAG + "getCamera", e.message.toString())
-        }
-        return mCamera
-    }
-
-    private fun playCamera() {
-        cameraViewBox.visibility = View.VISIBLE
-
-        if (surfaceHolder == null) {
-            surfaceHolder = cameraView.holder
-            surfaceHolder?.addCallback(this@MainActivity)
-        }
-
-        if (camera == null) {
-            camera = getCamera()
-            try {
-                camera?.setPreviewDisplay(surfaceHolder)
-                camera?.startPreview()
-            } catch (e: Exception) {
-                RobinApplication.log(TAG + "playCamera", e.message.toString())
-            }
-        }
-    }
-
-    private fun clearCameraData() {
-        cameraViewBox.visibility = View.GONE
-        camera?.setPreviewCallback(null)
-        camera?.stopPreview()
-        camera?.release()
-        camera = null
+    private fun setBackgroundAlpha(bgAlpha: Float) {
+        val lp = window.attributes
+        lp.alpha = bgAlpha
+        window.attributes = lp
     }
 
     private fun bindClickEvent() {
-        moreButton.setOnClickListener(this@MainActivity)
-        closeCameraTrigger.setOnClickListener(this@MainActivity)
-        takePictureTrigger.setOnClickListener(this@MainActivity)
+        openCamera.setOnClickListener(this@MainActivity)
+        openAlbum.setOnClickListener(this@MainActivity)
+        closeCameraView.setOnClickListener(this@MainActivity)
+        takePicture.setOnClickListener(this@MainActivity)
     }
 
     private fun setLoopImageInMiddle() {
@@ -241,7 +216,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SurfaceHolder.Ca
                     val message = Message()
                     message.what = 0x01
                     message.arg1 = 0
-                    mainHandler.sendMessage(message)
+                    mHandler.sendMessage(message)
 
                     Thread.sleep(duration / 4)
                     targetIndex = min + 1
@@ -250,7 +225,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SurfaceHolder.Ca
                 val message = Message()
                 message.what = 0x01
                 message.arg1 = targetIndex
-                mainHandler.sendMessage(message)
+                mHandler.sendMessage(message)
 
                 targetIndex += 1
             }
@@ -258,7 +233,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SurfaceHolder.Ca
         thread.start()
     }
 
-    class LoopImageAdapter constructor(val images: List<Int>) : RecyclerView.Adapter<LoopImageAdapter.Companion.ViewHolder>() {
+    class LoopImageAdapter constructor(private val images: List<Int>) : RecyclerView.Adapter<LoopImageAdapter.Companion.ViewHolder>() {
 
         companion object {
             class ViewHolder constructor(view: View) : RecyclerView.ViewHolder(view) {
@@ -283,5 +258,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SurfaceHolder.Ca
         override fun getItemCount(): Int {
             return images.size
         }
+    }
+
+    private fun openCamera() {
+        cameraView.start()
+        cameraViewBox.visibility = View.VISIBLE
+        setBackgroundAlpha(0.6f)
+    }
+
+    private fun closeCamera() {
+        cameraView.stop()
+        cameraViewBox.visibility = View.GONE
+        setBackgroundAlpha(1f)
     }
 }

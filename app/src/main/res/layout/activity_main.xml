@@ -17,7 +17,7 @@
 
                 <LinearLayout style="@style/wrap_content" android:orientation="horizontal" android:layout_gravity="start|center_vertical" android:gravity="center_vertical">
 
-                    <ImageView style="@style/company_logo" android:src="@mipmap/sinopec" android:contentDescription="@string/dover" />
+                    <ImageView style="@style/company_logo" android:src="@mipmap/sinopec1" android:contentDescription="@string/dover" />
 
                 </LinearLayout>
 
@@ -157,29 +157,62 @@
 
         <LinearLayout style="@style/more_box">
 
-            <TextView android:id="@+id/moreButton" style="@style/wrap_content" android:text="@string/more" android:textSize="18sp" android:textColor="#eb2129" />
+            <ImageView android:id="@+id/openCamera" android:layout_width="25dp" android:layout_height="25dp"
+                android:clickable="true" android:focusable="true"
+                android:contentDescription="@string/take_a_picture"
+                android:background="@drawable/drawable_take_picture"/>
 
-            <ImageView android:layout_width="30dp" android:layout_height="30dp" android:scaleType="fitXY" android:src="@mipmap/right_angle" android:contentDescription="@string/notice_welcome" />
+            <ImageView android:layout_width="1dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="#ED1F29"
+                android:contentDescription="@string/notice_welcome"/>
+
+            <ImageView android:id="@+id/openAlbum" android:layout_width="20dp" android:layout_height="20dp"
+                android:clickable="true" android:focusable="true"
+                android:contentDescription="@string/take_a_picture"
+                android:background="@drawable/drawable_album"
+                android:layout_marginEnd="20dp"/>
+
+            <TextView android:id="@+id/moreButton" style="@style/wrap_content"
+                android:text="@string/more"
+                android:textSize="18sp"
+                android:textColor="#eb2129" />
+
+            <ImageView android:layout_width="30dp" android:layout_height="30dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/right_angle"
+                android:contentDescription="@string/notice_welcome" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-    <RelativeLayout android:id="@+id/cameraViewBox" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="bottom" android:layout_marginBottom="100dp" android:visibility="gone">
+    <RelativeLayout android:id="@+id/cameraViewBox" style="@style/wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="100dp"
+        android:visibility="gone">
 
-        <SurfaceView android:id="@+id/cameraView" android:layout_width="800dp" android:layout_height="800dp" android:layout_centerInParent="true" />
+        <FrameLayout style="@style/wrap_content">
 
-        <LinearLayout style="@style/wrap_content" android:orientation="vertical" android:layout_toEndOf="@id/cameraView" android:layout_marginStart="20dp">
+            <com.wonderkiln.camerakit.CameraView android:id="@+id/cameraView" android:layout_width="900dp" android:layout_height="wrap_content"
+                android:adjustViewBounds="true" />
 
-            <LinearLayout style="@style/camera_side_item" android:id="@+id/takePictureTrigger">
-                <ImageView style="@style/camera_side_icon" android:src="@mipmap/take_a_picture" android:contentDescription="@string/take_a_picture" />
-            </LinearLayout>
+            <ImageView android:id="@+id/takePicture" android:layout_width="70dp" android:layout_height="70dp"
+                android:layout_gravity="bottom|center_horizontal"
+                android:clickable="true" android:focusable="true"
+                android:contentDescription="@string/take_a_picture"
+                android:background="@drawable/drawable_take_picture"/>
 
-            <LinearLayout style="@style/camera_side_item" android:id="@+id/closeCameraTrigger">
-                <ImageView style="@style/camera_side_icon" android:src="@mipmap/close" android:contentDescription="@string/close" />
-            </LinearLayout>
+            <ImageView android:id="@+id/closeCameraView" android:layout_width="60dp" android:layout_height="60dp"
+                android:layout_marginTop="14dp" android:layout_marginEnd="14dp"
+                android:layout_gravity="top|end"
+                android:clickable="true" android:focusable="true"
+                android:contentDescription="@string/close"
+                android:background="@drawable/drawable_close"/>
 
-        </LinearLayout>
+        </FrameLayout>
 
     </RelativeLayout>
 
