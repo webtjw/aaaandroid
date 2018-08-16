@@ -89,7 +89,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.openCamera -> openCamera()
-            R.id.language_box -> openCamera()
             R.id.closeCameraView -> closeCamera()
             R.id.takePicture -> {
                 if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
@@ -191,7 +190,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
         openAlbum.setOnClickListener(this@MainActivity)
         closeCameraView.setOnClickListener(this@MainActivity)
         takePicture.setOnClickListener(this@MainActivity)
-        language_box.setOnClickListener(this@MainActivity)
     }
 
     private fun setLoopImageInMiddle() {
@@ -200,6 +198,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
         loopImageRecyclerView.layoutManager = layoutManager
         // 这里是需要显示的照片，可随意增删
         val imageList = ArrayList<Int>()
+        imageList.add(R.mipmap.ad_1)
+        imageList.add(R.mipmap.ad_2)
+        imageList.add(R.mipmap.ad_3)
         imageList.add(R.mipmap.ad_4)
         imageList.add(R.mipmap.ad_5)
         imageList.add(R.mipmap.ad_6)
