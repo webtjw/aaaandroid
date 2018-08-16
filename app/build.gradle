@@ -20,6 +20,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "sinopec_offline_${defaultConfig.versionName}_${new Date().format("yyMMdd", TimeZone.getTimeZone("UTC"))}.apk"
+        }
+    }
 }
 
 dependencies {
