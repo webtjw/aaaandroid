@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.*
+import com.blankj.utilcode.util.FileUtils
 import com.wonderkiln.camerakit.CameraKitEventCallback
 import com.wonderkiln.camerakit.CameraKitImage
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -57,6 +58,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
 
     private val mHandler = MainHandler(this@MainActivity)
     private var loading: ZLoadingDialog? = null
+    private var videoList: ArrayList<String> = arrayListOf()
+    private var videoIndex: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -166,9 +169,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
         val screenWidth = dm.widthPixels
         val videoViewBoxHeight = screenWidth / 16 * 9 + 140 // 上下增加 70dp 的黑边
         mVideoViewBox.layoutParams = LinearLayout.LayoutParams(screenWidth, videoViewBoxHeight)
+
+        getLocalVideos()
+
         // prepare the widget
         mVideoView.setOnPreparedListener { mVideoView.start() }
-        mVideoView.setOnCompletionListener { mVideoView.start() }
+
+        if (videoList.size == 0) {
+            mVideoView.setOnCompletionListener { mVideoView.start() }
+            mVideoView.setVideoURI(Uri.parse("android.resource://" + packageName + "/" + R.raw.yijiezhuomaquan))
+        }
+        else {
+            mVideoView.setOnCompletionListener {
+                videoIndex++
+                if (videoIndex >= videoList.size) videoIndex = 0
+                mVideoView.setVideoPath(videoList[videoIndex])
+            }
+            mVideoView.setVideoPath(videoList[videoIndex])
+        }
+
         mVideoView.setOnErrorListener { _, what, extra ->
             RobinApplication.log(TAG, "video error: $what / $extra")
             val restartIntent = Intent(this@MainActivity, MainActivity::class.java)
@@ -176,7 +195,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
             this@MainActivity.startActivity(restartIntent)
             true
         }
-        mVideoView.setVideoURI(Uri.parse("android.resource://" + packageName + "/" + R.raw.yijiezhuomaquan))
     }
 
     private fun setBackgroundAlpha(bgAlpha: Float) {
@@ -292,5 +310,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
         cameraView.stop()
         cameraViewBox.visibility = View.GONE
         setBackgroundAlpha(1f)
+    }
+
+    private fun getLocalVideos() {
+        mVideoView!!.pause()
+
+        if (videoList.size != 0) videoList = arrayListOf()
+        val localVideosFolder = File("${Environment.getExternalStorageDirectory().absolutePath}/Sinopec/videos")
+        if (localVideosFolder.exists() && localVideosFolder.listFiles() != null) {
+            for (file in localVideosFolder.listFiles()) {
+                if (file.extension == "mp4") videoList.add(file.absolutePath)
+            }
+        }
     }
 }

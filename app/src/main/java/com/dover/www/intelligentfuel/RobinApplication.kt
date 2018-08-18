@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import com.blankj.utilcode.util.Utils
 
 class RobinApplication : Application() {
     companion object {
@@ -21,5 +22,10 @@ class RobinApplication : Application() {
         fun toast(ctx: Context, message: String) {
             Toast.makeText(ctx, message, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        Utils.init(this)
     }
 }
