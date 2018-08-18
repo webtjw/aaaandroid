@@ -9,7 +9,6 @@ import android.view.Gravity
 import com.blankj.utilcode.util.FileUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.dover.www.intelligentfuel.MainActivity
-import com.dover.www.intelligentfuel.RobinApplication
 import java.io.File
 
 class USBProcessor constructor(private val context: Context, private val usbPath: String?) {
@@ -44,9 +43,10 @@ class USBProcessor constructor(private val context: Context, private val usbPath
                         ToastUtils.setMsgColor(Color.parseColor("#ED1f29"))
                         ToastUtils.setMsgTextSize(32)
                         usbVideos.forEach { file ->
-                            ToastUtils.showLong("正在复制视频 ${file.name}")
+                            ToastUtils.showLong("正在复制视频 ${file.name}，请耐心等候")
                             FileUtils.copyFile(file.absolutePath, "$localVideosPath/${file.name}")
                         }
+                        ToastUtils.showLong("视频复制成功，即将刷新")
                         val refreshIntent = Intent(context, MainActivity::class.java)
                         refreshIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         context.startActivity(refreshIntent)

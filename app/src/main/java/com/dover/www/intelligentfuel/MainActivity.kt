@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
     }
 
     private fun takePicture() {
-        if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) {
+        if (!PermissionUtils.isGranted(PermissionConstants.STORAGE)) {
             loading = ZLoadingDialog(this@MainActivity)
             loading!!.setLoadingBuilder(Z_TYPE.CIRCLE)
                     .setLoadingColor(Color.parseColor("#ED1f29"))
