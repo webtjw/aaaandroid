@@ -40,9 +40,9 @@ class USBProcessor constructor(private val context: Context, private val usbPath
                         FileUtils.deleteAllInDir(localVideosPath)
                         // copy
                         ToastUtils.setBgColor(Color.WHITE)
-                        ToastUtils.setGravity(Gravity.CENTER or Gravity.BOTTOM, 0, 100)
+                        ToastUtils.setGravity(Gravity.CENTER, 0, 0)
                         ToastUtils.setMsgColor(Color.parseColor("#ED1f29"))
-                        ToastUtils.setMsgTextSize(22)
+                        ToastUtils.setMsgTextSize(32)
                         usbVideos.forEach { file ->
                             ToastUtils.showLong("正在复制视频 ${file.name}")
                             FileUtils.copyFile(file.absolutePath, "$localVideosPath/${file.name}")

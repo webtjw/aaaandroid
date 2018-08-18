@@ -18,7 +18,10 @@ import android.support.v7.widget.RecyclerView
 import android.util.DisplayMetrics
 import android.view.*
 import android.widget.*
+import com.blankj.utilcode.constant.PermissionConstants
 import com.blankj.utilcode.util.FileUtils
+import com.blankj.utilcode.util.PermissionUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.wonderkiln.camerakit.CameraKitEventCallback
 import com.wonderkiln.camerakit.CameraKitImage
 import com.zyao89.view.zloading.ZLoadingDialog
@@ -67,6 +70,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
 
         bindClickEvent()
         setLoopImageInMiddle()
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M && !PermissionUtils.isGranted(PermissionConstants.STORAGE)) applyStoragePermission()
+        else playVideos()
     }
 
     override fun onPause() {
@@ -79,11 +85,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
         if (cameraViewBox.visibility == View.VISIBLE && !cameraView.isStarted) cameraView.start()
     }
 
-    override fun onStart() {
-        super.onStart()
-        playVideos()
-    }
-
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         playVideos()
@@ -93,24 +94,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
         when (view?.id) {
             R.id.openCamera -> openCamera()
             R.id.closeCameraView -> closeCamera()
-            R.id.takePicture -> {
-                if (ContextCompat.checkSelfPermission(this@MainActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-                    ActivityCompat.requestPermissions(this@MainActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE), 1)
-                } else {
-                    takePicture()
-                }
-            }
+            R.id.takePicture -> takePicture()
             R.id.openAlbum -> this@MainActivity.startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), 1)
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            1 -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) takePicture()
-                else RobinApplication.toast(this@MainActivity, "未获取到存储权限，无法拍照")
-            }
         }
     }
 
@@ -152,13 +137,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
     }
 
     private fun takePicture() {
-        loading = ZLoadingDialog(this@MainActivity)
-        loading!!.setLoadingBuilder(Z_TYPE.CIRCLE)
-                .setLoadingColor(Color.parseColor("#ED1f29"))
-                .setHintText("照片处理中...")
-                .setHintTextSize(22f)
-                .show()
-        cameraView.captureImage(this)
+        if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) {
+            loading = ZLoadingDialog(this@MainActivity)
+            loading!!.setLoadingBuilder(Z_TYPE.CIRCLE)
+                    .setLoadingColor(Color.parseColor("#ED1f29"))
+                    .setHintText("照片处理中...")
+                    .setHintTextSize(24f)
+                    .show()
+            cameraView.captureImage(this)
+        } else {
+            ToastUtils.showLong("请先同意权限申请再拍照")
+            applyStoragePermission()
+        }
     }
 
     private fun playVideos() {
@@ -170,7 +160,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
         val videoViewBoxHeight = screenWidth / 16 * 9 + 140 // 上下增加 70dp 的黑边
         mVideoViewBox.layoutParams = LinearLayout.LayoutParams(screenWidth, videoViewBoxHeight)
 
-        getLocalVideos()
+        if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) getLocalVideos()
 
         // prepare the widget
         mVideoView.setOnPreparedListener { mVideoView.start() }
@@ -313,8 +303,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
     }
 
     private fun getLocalVideos() {
-        mVideoView!!.pause()
-
         if (videoList.size != 0) videoList = arrayListOf()
         val localVideosFolder = File("${Environment.getExternalStorageDirectory().absolutePath}/Sinopec/videos")
         if (localVideosFolder.exists() && localVideosFolder.listFiles() != null) {
@@ -322,5 +310,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
                 if (file.extension == "mp4") videoList.add(file.absolutePath)
             }
         }
+    }
+
+    private fun applyStoragePermission() {
+        PermissionUtils.permission(PermissionConstants.STORAGE).callback(object : PermissionUtils.FullCallback {
+            override fun onGranted(permissionsGranted: MutableList<String>?) {
+                playVideos()
+            }
+
+            override fun onDenied(permissionsDeniedForever: MutableList<String>?, permissionsDenied: MutableList<String>?) {
+                ToastUtils.showLong("未获取读写存储空间权限，应用可能会出错")
+                playVideos()
+            }
+        }).request()
     }
 }
