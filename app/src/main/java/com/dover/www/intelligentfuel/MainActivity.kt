@@ -3,6 +3,7 @@ package com.dover.www.intelligentfuel
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -69,9 +70,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
         setContentView(R.layout.activity_main)
 
         bindClickEvent()
+        setVideoHeight()
         setLoopImageInMiddle()
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M && !PermissionUtils.isGranted(PermissionConstants.STORAGE)) applyStoragePermission()
+        if (!PermissionUtils.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) applyStoragePermission()
         else playVideos()
     }
 
@@ -95,63 +97,74 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
             R.id.openCamera -> openCamera()
             R.id.closeCameraView -> closeCamera()
             R.id.takePicture -> takePicture()
-            R.id.openAlbum -> this@MainActivity.startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), 1)
+            R.id.openAlbum -> {
+                if (cameraViewBox.visibility == View.VISIBLE) closeCamera()
+                this@MainActivity.startActivityForResult(Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI), 1)
+            }
         }
     }
 
     override fun callback(cameraKitImage: CameraKitImage?) {
         Thread {
-            var saveFolder: String = this@MainActivity.filesDir.path + File.separator
-
-            if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageRemovable()) {
-                saveFolder = Environment.getExternalStorageDirectory().absolutePath + File.separator + Environment.DIRECTORY_DCIM + File.separator + "Camera" + File.separator
-            }
-
-            val fileFolder = File(saveFolder)
-            if (!fileFolder.exists()) fileFolder.mkdirs()
-
-            val fileName = Date().time.toString() + ".jpg"
-            val filePath: String = saveFolder + fileName
-
-            // save file
             try {
-                val out = FileOutputStream(filePath)
-                if (cameraKitImage!!.bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)) {
-                    out.flush()
-                    out.close()
+                var saveFolder: String = this@MainActivity.filesDir.path + File.separator
+
+                if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageRemovable()) {
+                    saveFolder = Environment.getExternalStorageDirectory().absolutePath + File.separator + Environment.DIRECTORY_DCIM + File.separator + "Camera" + File.separator
                 }
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
+
+                val fileFolder = File(saveFolder)
+                if (!fileFolder.exists()) fileFolder.mkdirs()
+
+                val fileName = Date().time.toString() + ".jpg"
+                val filePath: String = saveFolder + fileName
+
+                // save file
+                try {
+                    val out = FileOutputStream(filePath)
+                    if (cameraKitImage!!.bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)) {
+                        out.flush()
+                        out.close()
+                    }
+                } catch (e: FileNotFoundException) {
+                    e.printStackTrace()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+                val imageFile = File(filePath)
+                MediaStore.Images.Media.insertImage(this@MainActivity.contentResolver, imageFile.absolutePath, fileName, null)
+                // 图片加入相册
+                val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+                val contentUri = Uri.fromFile(imageFile)
+                mediaScanIntent.data = contentUri
+                this@MainActivity.sendBroadcast(mediaScanIntent)
+                this@MainActivity.loading!!.dismiss()
             } catch (e: IOException) {
-                e.printStackTrace()
+                RobinApplication.log(TAG, e.message.toString(), 3)
             }
-            val imageFile = File(filePath)
-            MediaStore.Images.Media.insertImage(this@MainActivity.contentResolver, imageFile.absolutePath, fileName, null)
-            // 图片加入相册
-            val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-            val contentUri = Uri.fromFile(imageFile)
-            mediaScanIntent.data = contentUri
-            this@MainActivity.sendBroadcast(mediaScanIntent)
-            this@MainActivity.loading!!.dismiss()
         }.start()
     }
 
     private fun takePicture() {
-        if (!PermissionUtils.isGranted(PermissionConstants.STORAGE)) {
+        if (PermissionUtils.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             loading = ZLoadingDialog(this@MainActivity)
             loading!!.setLoadingBuilder(Z_TYPE.CIRCLE)
                     .setLoadingColor(Color.parseColor("#ED1f29"))
                     .setHintText("照片处理中...")
                     .setHintTextSize(24f)
                     .show()
-            cameraView.captureImage(this)
+            try {
+                cameraView.captureImage(this)
+            } catch (e: IOException) {
+                RobinApplication.log(TAG, "cameraView.captureImage 发生错误 ${e.message}")
+            }
         } else {
             ToastUtils.showLong("请先同意权限申请再拍照")
             applyStoragePermission()
         }
     }
 
-    private fun playVideos() {
+    private fun setVideoHeight() {
         // video display should obey percentage 16:9
         val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val dm = DisplayMetrics()
@@ -159,8 +172,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
         val screenWidth = dm.widthPixels
         val videoViewBoxHeight = screenWidth / 16 * 9 + 140 // 上下增加 70dp 的黑边
         mVideoViewBox.layoutParams = LinearLayout.LayoutParams(screenWidth, videoViewBoxHeight)
+    }
 
-        if (PermissionUtils.isGranted(PermissionConstants.STORAGE)) getLocalVideos()
+    private fun playVideos() {
+        // 如果没有权限，则播放本地视频
+        if (PermissionUtils.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) getLocalVideos()
 
         // prepare the widget
         mVideoView.setOnPreparedListener { mVideoView.start() }
@@ -304,7 +320,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
 
     private fun getLocalVideos() {
         if (videoList.size != 0) videoList = arrayListOf()
-        val localVideosFolder = File("${Environment.getExternalStorageDirectory().absolutePath}/Sinopec/videos")
+        val localVideosFolderPath = "${Environment.getExternalStorageDirectory().absolutePath}/Sinopec/videos"
+        val localVideosFolder = File(localVideosFolderPath)
         if (localVideosFolder.exists() && localVideosFolder.listFiles() != null) {
             for (file in localVideosFolder.listFiles()) {
                 if (file.extension == "mp4") videoList.add(file.absolutePath)
@@ -313,7 +330,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
     }
 
     private fun applyStoragePermission() {
-        PermissionUtils.permission(PermissionConstants.STORAGE).callback(object : PermissionUtils.FullCallback {
+        PermissionUtils.permission(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).callback(object : PermissionUtils.FullCallback {
             override fun onGranted(permissionsGranted: MutableList<String>?) {
                 playVideos()
             }

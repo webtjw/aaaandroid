@@ -22,6 +22,7 @@ class BroadcastDispatcher : BroadcastReceiver() {
                 context?.startActivity(mainIntent)
             }
             Intent.ACTION_MEDIA_MOUNTED -> {
+                RobinApplication.log(TAG, "receive ACTION_MEDIA_MOUNTED")
                 val manager = context?.getSystemService(Context.USB_SERVICE) as UsbManager
                 val usbDeviceList = manager.deviceList
                 val deviceIterator = usbDeviceList.values.iterator()
@@ -29,7 +30,9 @@ class BroadcastDispatcher : BroadcastReceiver() {
                     val usbDevice = deviceIterator.next()
                     val usbDeviceType = usbDevice.getInterface(0).interfaceClass
                     // 8 为 u 盘，证明当前有 U 盘接入了，但不能确认本 intent 是否由该 U 盘发起，过渡性的代码
+                    RobinApplication.log(TAG, "loop device type  is $usbDeviceType")
                     if (usbDeviceType == 8 && intent.data != null) {
+                        RobinApplication.log(TAG, "found udisk which's path is ${intent.data?.path}")
                         val usbProcessor = USBProcessor(context, intent.data?.path)
                         usbProcessor.copyUSBVideos()
                     }
