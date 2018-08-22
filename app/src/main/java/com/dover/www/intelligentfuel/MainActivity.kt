@@ -54,6 +54,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
                             if (position == 0) activity.loopImageRecyclerView.scrollToPosition(0)
                             else activity.loopImageRecyclerView.smoothScrollToPosition(position)
                         }
+                        0x02 -> {
+                            activity.mVideoView.setVideoPath(activity.videoList[activity.videoIndex])
+                        }
+                        0x03 -> {
+                            RobinApplication.toast(activity, "前一个视频播放未完成")
+                        }
                     }
                 }
             }
@@ -179,18 +185,40 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, CameraKitEventCa
         if (PermissionUtils.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) getLocalVideos()
 
         // prepare the widget
-        mVideoView.setOnPreparedListener { mVideoView.start() }
 
         if (videoList.size == 0) {
-            mVideoView.setOnCompletionListener { mVideoView.start() }
+            mVideoView.setOnPreparedListener { mediaPlayer ->
+                mediaPlayer!!.isLooping = true
+                mVideoView.start()
+            }
+            // mVideoView.setOnCompletionListener { mVideoView.start() }
             mVideoView.setVideoURI(Uri.parse("android.resource://" + packageName + "/" + R.raw.yijiezhuomaquan))
         }
         else {
+            mVideoView.setOnPreparedListener { mVideoView.start() }
             mVideoView.setOnCompletionListener {
                 videoIndex++
                 if (videoIndex >= videoList.size) videoIndex = 0
-                mVideoView.setVideoPath(videoList[videoIndex])
+
+                if (mVideoView.isPlaying) {
+                    val stillPlayingMsg = Message()
+                    stillPlayingMsg.what = 0x03
+                    mHandler.sendMessage(stillPlayingMsg)
+                }
+
+                // 如果设备很卡，那么 videoview.isplaying 可能还是 true，需要等待一下
+                Thread {
+                    val delay: Long = 240
+                    RobinApplication.log(TAG, "当前 videoview 的 isplaying 状态为 ${mVideoView.isPlaying}，将等待${delay}毫秒")
+                    Thread.sleep(delay)
+                    val message = Message()
+                    message.what = 0x02
+                    mHandler.sendMessage(message)
+                }.start()
+
+                return@setOnCompletionListener
             }
+
             mVideoView.setVideoPath(videoList[videoIndex])
         }
 
