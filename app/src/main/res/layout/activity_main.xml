@@ -69,341 +69,249 @@
             android:layout_height="wrap_content"
             android:gravity="top|center_horizontal"
             android:orientation="horizontal">
-
+            <!--枪布局-->
             <RelativeLayout style="@style/gun_display_item">
-
-                <LinearLayout android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="240dp"
-                        android:background="@mipmap/gun_item_bg" android:gravity="center">
-
-                        <LinearLayout android:layout_width="160dp" android:layout_height="180dp"
-                            android:background="@drawable/gun_item_radius" android:gravity="center" android:layout_marginTop="-10dp">
-
-                            <ImageView android:layout_width="120dp"
-                                android:layout_height="wrap_content"
-                                android:scaleType="fitCenter"
-                                android:src="@mipmap/nozzle_status_1"
-                                android:contentDescription="@string/notice_welcome" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <RelativeLayout android:layout_width="match_parent" android:layout_height="210dp">
-
-                        <LinearLayout android:layout_width="117dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:background="#F03840">
-
-                            <ImageView style="@style/pay_icon"
-                                android:src="@mipmap/pay_1"
-                                android:contentDescription="@string/pay_in_cash" />
-
-                        </LinearLayout>
-
-                        <LinearLayout android:layout_width="117dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:layout_alignParentEnd="true"
-                            android:background="#ed212a">
-
-                            <ImageView style="@style/pay_icon"
-                                android:src="@mipmap/pay_2"
-                                android:contentDescription="@string/pay_by_mobile" />
-
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-                <LinearLayout android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_centerInParent="true"
-                    android:gravity="center">
-
-                    <TextView style="@style/gun_oil_type_text"
-                        android:layout_marginTop="-15dp"
-                        android:text="@string/oil_98" />
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout style="@style/gun_display_item">
-
+                <!--枪信息-->
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="240dp"
-                        android:background="@mipmap/gun_item_bg" android:gravity="center">
-
-                        <LinearLayout android:layout_width="160dp" android:layout_height="180dp"
-                            android:background="@drawable/gun_item_radius" android:gravity="center" android:layout_marginTop="-10dp">
-
-                            <ImageView android:layout_width="120dp"
-                                android:layout_height="wrap_content"
-                                android:scaleType="fitCenter"
-                                android:src="@mipmap/nozzle_status_2"
-                                android:contentDescription="@string/notice_welcome" />
-
+                    <!--枪号 + 油品 + icon + 交易数据-->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="380dp" android:background="@mipmap/gun_item_bg"  android:orientation="vertical" android:gravity="center_horizontal">
+                        <!--枪号 + 油品-->
+                        <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal"
+                            android:paddingTop="10dp" android:paddingBottom="10dp" android:gravity="center_vertical">
+                            <!--枪号-->
+                            <TextView android:layout_width="38dp" android:layout_height="38dp" android:textAlignment="center"
+                                android:textSize="30sp" android:textColor="#151922"
+                                android:background="@drawable/gun_number_bg" android:text="@string/gun_num_1"/>
+                            <!--油品-->
+                            <TextView style="@style/wrap_content" android:textSize="32sp" android:textColor="#fff" android:text="@string/oil_98" android:layout_marginStart="15dp"/>
                         </LinearLayout>
-
-                    </LinearLayout>
-
-                    <RelativeLayout android:layout_width="match_parent" android:layout_height="210dp">
-
-                        <LinearLayout android:layout_width="117dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:background="#F03840">
-
-                            <ImageView style="@style/pay_icon"
-                                android:src="@mipmap/pay_1"
-                                android:contentDescription="@string/pay_in_cash" />
-
+                        <!--icon-->
+                        <LinearLayout android:layout_width="120dp" android:layout_height="120dp" android:gravity="center" android:background="@drawable/gun_item_radius">
+                            <!--icon-->
+                            <ImageView android:layout_width="80dp" android:layout_height="80dp" android:scaleType="fitXY"
+                                android:src="@mipmap/nozzle_status_1" android:contentDescription="@string/gun_status_1"/>
                         </LinearLayout>
+                        <!--金额 + 升数 + 单价-->
+                        <LinearLayout style="@style/wrap_content" android:orientation="vertical" android:layout_marginTop="24dp">
 
-                        <LinearLayout android:layout_width="117dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:layout_alignParentEnd="true"
-                            android:background="#ed212a">
+                            <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:baselineAligned="true"
+                                android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginBottom="10dp">
+                                <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="金额"/>
+                                <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="32sp" android:text="￥0"/>
+                            </LinearLayout>
 
-                            <ImageView style="@style/pay_icon"
-                                android:src="@mipmap/pay_2"
-                                android:contentDescription="@string/pay_by_mobile" />
+                            <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:baselineAligned="true"
+                                android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginBottom="10dp">
+                                <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="油量"/>
+                                <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="28sp" android:text="0L"/>
+                            </LinearLayout>
 
-                        </LinearLayout>
-
-                        <LinearLayout style="@style/match_parent"
-                            android:orientation="vertical">
-
-                            <LinearLayout style="@style/match_parent" android:background="#ed212a" android:orientation="vertical" android:gravity="center">
-
-                                <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:gravity="bottom"
-                                    android:paddingTop="4dp" android:paddingBottom="4dp" android:layout_marginTop="10dp">
-
-                                    <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="单价"/>
-                                    <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="24sp" android:text="￥7.92"/>
-
-                                </LinearLayout>
-
-                                <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:gravity="bottom"
-                                    android:paddingTop="4dp" android:paddingBottom="4dp" android:layout_marginTop="10dp">
-
-                                    <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="油量"/>
-                                    <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="24sp" android:text="0 L"/>
-
-                                </LinearLayout>
-
-                                <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:gravity="bottom"
-                                    android:paddingTop="4dp" android:paddingBottom="4dp" android:layout_marginTop="10dp">
-
-                                    <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="金额"/>
-                                    <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="28sp" android:text="￥0"/>
-
-                                </LinearLayout>
-
+                            <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:baselineAligned="true"
+                                android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginBottom="10dp">
+                                <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="单价"/>
+                                <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="24sp" android:text="￥7.92"/>
                             </LinearLayout>
 
                         </LinearLayout>
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-                <LinearLayout android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_centerInParent="true"
-                    android:gravity="center">
-
-                    <TextView style="@style/gun_oil_type_text"
-                        android:layout_marginTop="-15dp"
-                        android:text="@string/oil_98" />
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout style="@style/gun_display_item">
-
-                <LinearLayout android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="240dp"
-                        android:background="@mipmap/gun_item_bg" android:gravity="center">
-
-                        <LinearLayout android:layout_width="160dp" android:layout_height="180dp"
-                            android:background="@drawable/gun_item_radius" android:gravity="center" android:layout_marginTop="-10dp">
-
-                            <ImageView android:layout_width="120dp"
-                                android:layout_height="wrap_content"
-                                android:scaleType="fitCenter"
-                                android:src="@mipmap/nozzle_status_3"
-                                android:contentDescription="@string/notice_welcome" />
-
-                        </LinearLayout>
-
                     </LinearLayout>
-
-                    <RelativeLayout android:layout_width="match_parent" android:layout_height="210dp">
-
-                        <LinearLayout android:layout_width="117dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:background="#F03840">
-
-                            <ImageView style="@style/pay_icon"
-                                android:src="@mipmap/pay_1"
-                                android:contentDescription="@string/pay_in_cash" />
-
+                    <!--支付方式-->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="110dp" android:weightSum="12" android:orientation="horizontal" android:baselineAligned="true">
+                        <!--现金支付-->
+                        <LinearLayout android:layout_height="match_parent" android:layout_width="0dp" android:layout_weight="6" android:gravity="center" android:background="#f83840" android:orientation="vertical">
+                            <ImageView android:layout_width="60dp" android:layout_height="60dp" android:scaleType="fitXY" android:adjustViewBounds="true" android:src="@mipmap/pay_cash" android:contentDescription="@string/pay_in_cash"/>
+                            <TextView style="@style/wrap_content" android:textColor="#fff" android:text="@string/pay_in_cash"/>
                         </LinearLayout>
-
-                        <LinearLayout android:layout_width="117dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:layout_alignParentEnd="true"
-                            android:background="#ed212a">
-
-                            <ImageView style="@style/pay_icon"
-                                android:src="@mipmap/pay_2"
-                                android:contentDescription="@string/pay_by_mobile" />
-
+                        <!--移动支付-->
+                        <LinearLayout android:layout_height="match_parent" android:layout_width="0dp" android:layout_weight="6" android:gravity="center" android:background="#ee202a" android:orientation="vertical">
+                            <ImageView android:layout_width="60dp" android:layout_height="60dp" android:scaleType="fitXY" android:adjustViewBounds="true" android:src="@mipmap/pay_mobile" android:contentDescription="@string/pay_by_mobile"/>
+                            <TextView style="@style/wrap_content" android:textColor="#fff" android:text="@string/pay_by_mobile"/>
                         </LinearLayout>
-
-                        <LinearLayout style="@style/match_parent"
-                            android:orientation="vertical">
-
-                            <LinearLayout style="@style/match_parent" android:background="#ed212a" android:orientation="vertical" android:gravity="center">
-
-                                <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:gravity="bottom"
-                                    android:paddingTop="4dp" android:paddingBottom="4dp" android:layout_marginTop="10dp">
-
-                                    <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="单价"/>
-                                    <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="24sp" android:text="￥7.92"/>
-
-                                </LinearLayout>
-
-                                <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:gravity="bottom"
-                                    android:paddingTop="4dp" android:paddingBottom="4dp" android:layout_marginTop="10dp">
-
-                                    <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="油量"/>
-                                    <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="24sp" android:text="100.02L"/>
-
-                                </LinearLayout>
-
-                                <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:gravity="bottom"
-                                    android:paddingTop="4dp" android:paddingBottom="4dp" android:layout_marginTop="10dp">
-
-                                    <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="金额"/>
-                                    <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="28sp" android:text="￥788.92"/>
-
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
+                    </LinearLayout>
                 </LinearLayout>
-
-                <LinearLayout android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_centerInParent="true"
-                    android:gravity="center">
-
-                    <TextView style="@style/gun_oil_type_text"
-                        android:layout_marginTop="-15dp"
-                        android:text="@string/oil_98" />
-
-                </LinearLayout>
-
+                <!--枪提示-->
             </RelativeLayout>
-
+            <!--枪布局-->
             <RelativeLayout style="@style/gun_display_item">
-
+                <!--枪信息-->
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <!--枪号 + 油品 + icon + 交易数据-->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="380dp" android:background="@mipmap/gun_item_bg"  android:orientation="vertical" android:gravity="center_horizontal">
+                        <!--枪号 + 油品-->
+                        <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal"
+                            android:paddingTop="10dp" android:paddingBottom="10dp" android:gravity="center_vertical">
+                            <!--枪号-->
+                            <TextView android:layout_width="38dp" android:layout_height="38dp" android:textAlignment="center"
+                                android:textSize="30sp" android:textColor="#151922"
+                                android:background="@drawable/gun_number_bg" android:text="@string/gun_num_2"/>
+                            <!--油品-->
+                            <TextView style="@style/wrap_content" android:textSize="32sp" android:textColor="#fff" android:text="@string/oil_95" android:layout_marginStart="15dp"/>
+                        </LinearLayout>
+                        <!--icon-->
+                        <LinearLayout android:layout_width="120dp" android:layout_height="120dp" android:gravity="center" android:background="@drawable/gun_item_radius">
+                            <!--icon-->
+                            <ImageView android:layout_width="80dp" android:layout_height="80dp" android:scaleType="fitXY"
+                                android:src="@mipmap/nozzle_status_2" android:contentDescription="@string/gun_status_1"/>
+                        </LinearLayout>
+                        <!--金额 + 升数 + 单价-->
+                        <LinearLayout style="@style/wrap_content" android:orientation="vertical" android:layout_marginTop="24dp">
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="240dp"
-                        android:background="@mipmap/gun_item_bg" android:gravity="center">
-
-                        <LinearLayout android:layout_width="180dp" android:layout_height="180dp" android:orientation="vertical"
-                            android:background="@drawable/gun_item_radius" android:gravity="center" android:layout_marginTop="-10dp">
-
-                            <LinearLayout android:layout_width="160dp" android:layout_height="wrap_content" android:gravity="bottom" android:orientation="horizontal">
-
-                                <TextView style="@style/wrap_content" android:textColor="#000" android:textSize="16sp" android:text="单价"/>
-                                <TextView style="@style/wrap_content" android:textColor="#ee202a" android:textSize="18sp" android:text="￥7.92"/>
-
-                                <ImageView android:layout_width="80dp" android:layout_height="80dp" android:scaleType="fitXY"
-                                    android:src="@mipmap/nozzle_status_4" android:contentDescription="@string/notice_welcome" />
-
+                            <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:baselineAligned="true"
+                                android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginBottom="10dp">
+                                <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="金额"/>
+                                <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="32sp" android:text="￥30.12"/>
                             </LinearLayout>
 
-                            <LinearLayout android:layout_width="160dp" android:layout_height="wrap_content" android:gravity="bottom" android:orientation="horizontal">
-
-                                <TextView style="@style/wrap_content" android:textColor="#000" android:textSize="16sp" android:text="油量"/>
-                                <TextView style="@style/wrap_content" android:textColor="#ee202a" android:textSize="18sp" android:text="100 L"/>
-
+                            <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:baselineAligned="true"
+                                android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginBottom="10dp">
+                                <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="油量"/>
+                                <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="28sp" android:text="40.22L"/>
                             </LinearLayout>
 
-                            <LinearLayout android:layout_width="160dp" android:layout_height="wrap_content" android:gravity="bottom" android:orientation="horizontal">
-
-                                <TextView style="@style/wrap_content" android:textColor="#000" android:textSize="16sp" android:text="金额"/>
-                                <TextView style="@style/wrap_content" android:textColor="#ee202a" android:textSize="22sp" android:text="￥792.99"/>
-
+                            <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:baselineAligned="true"
+                                android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginBottom="10dp">
+                                <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="单价"/>
+                                <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="24sp" android:text="￥7.92"/>
                             </LinearLayout>
 
                         </LinearLayout>
-
                     </LinearLayout>
+                    <!--支付方式-->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="110dp" android:weightSum="12" android:orientation="horizontal" android:baselineAligned="true">
+                        <!--现金支付-->
+                        <LinearLayout android:layout_height="match_parent" android:layout_width="0dp" android:layout_weight="6" android:gravity="center" android:background="#f83840" android:orientation="vertical">
+                            <ImageView android:layout_width="60dp" android:layout_height="60dp" android:scaleType="fitXY" android:adjustViewBounds="true" android:src="@mipmap/pay_cash" android:contentDescription="@string/pay_in_cash"/>
+                            <TextView style="@style/wrap_content" android:textColor="#fff" android:text="@string/pay_in_cash"/>
+                        </LinearLayout>
+                        <!--移动支付-->
+                        <LinearLayout android:layout_height="match_parent" android:layout_width="0dp" android:layout_weight="6" android:gravity="center" android:background="#ee202a" android:orientation="vertical">
+                            <ImageView android:layout_width="60dp" android:layout_height="60dp" android:scaleType="fitXY" android:adjustViewBounds="true" android:src="@mipmap/pay_mobile" android:contentDescription="@string/pay_by_mobile"/>
+                            <TextView style="@style/wrap_content" android:textColor="#fff" android:text="@string/pay_by_mobile"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+                <!--枪提示-->
+            </RelativeLayout>
+            <!--枪布局-->
+            <RelativeLayout style="@style/gun_display_item">
+                <!--枪信息-->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <!--枪号 + 油品 + icon + 交易数据-->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="380dp" android:background="@mipmap/gun_item_bg"  android:orientation="vertical" android:gravity="center_horizontal">
+                        <!--枪号 + 油品-->
+                        <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal"
+                            android:paddingTop="10dp" android:paddingBottom="10dp" android:gravity="center_vertical">
+                            <!--枪号-->
+                            <TextView android:layout_width="38dp" android:layout_height="38dp" android:textAlignment="center"
+                                android:textSize="30sp" android:textColor="#151922"
+                                android:background="@drawable/gun_number_bg" android:text="@string/gun_num_3"/>
+                            <!--油品-->
+                            <TextView style="@style/wrap_content" android:textSize="32sp" android:textColor="#fff" android:text="@string/oil_92" android:layout_marginStart="15dp"/>
+                        </LinearLayout>
+                        <!--icon-->
+                        <LinearLayout android:layout_width="120dp" android:layout_height="120dp" android:gravity="center" android:background="@drawable/gun_item_radius">
+                            <!--icon-->
+                            <ImageView android:layout_width="80dp" android:layout_height="80dp" android:scaleType="fitXY"
+                                android:src="@mipmap/nozzle_status_3" android:contentDescription="@string/gun_status_1"/>
+                        </LinearLayout>
+                        <!--金额 + 升数 + 单价-->
+                        <LinearLayout style="@style/wrap_content" android:orientation="vertical" android:layout_marginTop="24dp">
 
-                    <RelativeLayout android:layout_width="match_parent" android:layout_height="210dp">
+                            <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:baselineAligned="true"
+                                android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginBottom="10dp">
+                                <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="金额"/>
+                                <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="32sp" android:text="￥30.12"/>
+                            </LinearLayout>
 
-                        <LinearLayout android:layout_width="117dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:background="#F03840">
+                            <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:baselineAligned="true"
+                                android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginBottom="10dp">
+                                <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="油量"/>
+                                <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="28sp" android:text="40.22L"/>
+                            </LinearLayout>
 
-                            <ImageView style="@style/pay_icon"
-                                android:src="@mipmap/pay_1"
-                                android:contentDescription="@string/pay_in_cash" />
+                            <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:baselineAligned="true"
+                                android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginBottom="10dp">
+                                <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="单价"/>
+                                <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="24sp" android:text="￥7.92"/>
+                            </LinearLayout>
 
                         </LinearLayout>
+                    </LinearLayout>
+                    <!--支付方式-->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="110dp" android:weightSum="12" android:orientation="horizontal" android:baselineAligned="true">
+                        <!--现金支付-->
+                        <LinearLayout android:layout_height="match_parent" android:layout_width="0dp" android:layout_weight="6" android:gravity="center" android:background="#f83840" android:orientation="vertical">
+                            <ImageView android:layout_width="60dp" android:layout_height="60dp" android:scaleType="fitXY" android:adjustViewBounds="true" android:src="@mipmap/pay_cash" android:contentDescription="@string/pay_in_cash"/>
+                            <TextView style="@style/wrap_content" android:textColor="#fff" android:text="@string/pay_in_cash"/>
+                        </LinearLayout>
+                        <!--移动支付-->
+                        <LinearLayout android:layout_height="match_parent" android:layout_width="0dp" android:layout_weight="6" android:gravity="center" android:background="#ee202a" android:orientation="vertical">
+                            <ImageView android:layout_width="60dp" android:layout_height="60dp" android:scaleType="fitXY" android:adjustViewBounds="true" android:src="@mipmap/pay_mobile" android:contentDescription="@string/pay_by_mobile"/>
+                            <TextView style="@style/wrap_content" android:textColor="#fff" android:text="@string/pay_by_mobile"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+                <!--枪提示-->
+            </RelativeLayout>
+            <!--枪布局-->
+            <RelativeLayout style="@style/gun_display_item">
+                <!--枪信息-->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+                    <!--枪号 + 油品 + icon + 交易数据-->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="380dp" android:background="@mipmap/gun_item_bg"  android:orientation="vertical" android:gravity="center_horizontal">
+                        <!--枪号 + 油品-->
+                        <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal"
+                            android:paddingTop="10dp" android:paddingBottom="10dp" android:gravity="center_vertical">
+                            <!--枪号-->
+                            <TextView android:layout_width="38dp" android:layout_height="38dp" android:textAlignment="center"
+                                android:textSize="30sp" android:textColor="#151922"
+                                android:background="@drawable/gun_number_bg" android:text="@string/gun_num_4"/>
+                            <!--油品-->
+                            <TextView style="@style/wrap_content" android:textSize="32sp" android:textColor="#fff" android:text="@string/oil_0" android:layout_marginStart="15dp"/>
+                        </LinearLayout>
+                        <!--icon-->
+                        <LinearLayout android:layout_width="120dp" android:layout_height="120dp" android:gravity="center" android:background="@drawable/gun_item_radius">
+                            <!--icon-->
+                            <ImageView android:layout_width="80dp" android:layout_height="80dp" android:scaleType="fitXY"
+                                android:src="@mipmap/nozzle_status_4" android:contentDescription="@string/gun_status_1"/>
+                        </LinearLayout>
+                        <!--金额 + 升数 + 单价-->
+                        <LinearLayout style="@style/wrap_content" android:orientation="vertical" android:layout_marginTop="24dp">
 
-                        <LinearLayout android:layout_width="117dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:layout_alignParentEnd="true"
-                            android:background="#ed212a">
+                            <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:baselineAligned="true"
+                                android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginBottom="10dp">
+                                <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="金额"/>
+                                <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="32sp" android:text="￥30.12"/>
+                            </LinearLayout>
 
-                            <ImageView style="@style/pay_icon"
-                                android:src="@mipmap/pay_2"
-                                android:contentDescription="@string/pay_by_mobile" />
+                            <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:baselineAligned="true"
+                                android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginBottom="10dp">
+                                <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="油量"/>
+                                <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="28sp" android:text="40.22L"/>
+                            </LinearLayout>
+
+                            <LinearLayout android:layout_width="200dp" android:layout_height="wrap_content" android:orientation="horizontal" android:background="#fff" android:baselineAligned="true"
+                                android:paddingTop="2dp" android:paddingBottom="2dp" android:layout_marginBottom="10dp">
+                                <TextView android:layout_height="wrap_content" android:layout_width="70dp" android:textColor="#333" android:textSize="18sp" android:gravity="center" android:text="单价"/>
+                                <TextView style="@style/wrap_content" android:textColor="#ed212a" android:textSize="24sp" android:text="￥7.92"/>
+                            </LinearLayout>
 
                         </LinearLayout>
-
-                    </RelativeLayout>
-
+                    </LinearLayout>
+                    <!--支付方式-->
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="110dp" android:weightSum="12" android:orientation="horizontal" android:baselineAligned="true">
+                        <!--现金支付-->
+                        <LinearLayout android:layout_height="match_parent" android:layout_width="0dp" android:layout_weight="6" android:gravity="center" android:background="#f83840" android:orientation="vertical">
+                            <ImageView android:layout_width="60dp" android:layout_height="60dp" android:scaleType="fitXY" android:adjustViewBounds="true" android:src="@mipmap/pay_cash" android:contentDescription="@string/pay_in_cash"/>
+                            <TextView style="@style/wrap_content" android:textColor="#fff" android:text="@string/pay_in_cash"/>
+                        </LinearLayout>
+                        <!--移动支付-->
+                        <LinearLayout android:layout_height="match_parent" android:layout_width="0dp" android:layout_weight="6" android:gravity="center" android:background="#ee202a" android:orientation="vertical">
+                            <ImageView android:layout_width="60dp" android:layout_height="60dp" android:scaleType="fitXY" android:adjustViewBounds="true" android:src="@mipmap/pay_mobile" android:contentDescription="@string/pay_by_mobile"/>
+                            <TextView style="@style/wrap_content" android:textColor="#fff" android:text="@string/pay_by_mobile"/>
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
-
-                <LinearLayout android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_centerInParent="true"
-                    android:gravity="center">
-
-                    <TextView style="@style/gun_oil_type_text"
-                        android:layout_marginTop="-15dp"
-                        android:text="@string/oil_98" />
-
-                </LinearLayout>
-
+                <!--枪提示-->
             </RelativeLayout>
 
         </LinearLayout>

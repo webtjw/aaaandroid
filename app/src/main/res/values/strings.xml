@@ -23,4 +23,9 @@
     <string name="oil_0">0#柴油</string>
     <string name="oil_92">92号汽油</string>
     <string name="oil_89">89号汽油</string>
+    <string name="gun_status_1">空闲</string>
+    <string name="gun_num_1">1</string>
+    <string name="gun_num_2">2</string>
+    <string name="gun_num_3">3</string>
+    <string name="gun_num_4">4</string>
 </resources>
